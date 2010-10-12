@@ -1,8 +1,6 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 # PMS plugin framework
 from PMS import *
-from PMS.Objects import *
-from PMS.Shortcuts import *
 
 ####################################################################################################
 # Author : GuinuX. For any bug report, PM GuinuX on Plex Forums
@@ -20,7 +18,6 @@ PLUGIN_ID               = "com.plexapp.plugins.tf1eplay"
 PLUGIN_REVISION         = 0.1
 PLUGIN_UPDATES_ENABLED  = True
 
-
 ART           = 'art-default.jpg'
 ICON          = 'icon-default.png'
 
@@ -31,13 +28,13 @@ def Start():
 	Plugin.AddPrefixHandler(VIDEO_PREFIX, VideoMainMenu, NAME, ICON, ART)
 	Plugin.AddViewGroup("Coverflow", viewMode="Coverflow", mediaType="items")
 	Plugin.AddViewGroup("InfoList", viewMode="InfoList", mediaType="items")
-	
+
 	
 	MediaContainer.art = R(ART)
 	MediaContainer.title1 = NAME
 	DirectoryItem.thumb = R(ICON)
 
-  
+
 
 def VideoMainMenu():
 	global XML_DATA
@@ -48,10 +45,10 @@ def VideoMainMenu():
 		XML_DATA = HTTP.Request(XML_CATALOG, cacheTime=CACHE_1MINUTE * 30)
 	except Ex.HTTPError, e:
 		Log(NAME + " Plugin : " + str(e))
-		return MessageContainer(NAME, "Erreur lors de la récupération du flux XML.")	
+		return MessageContainer(NAME, "Erreur lors de la rÃ©cupÃ©ration du flux XML.")	
 	except Exception, e :
 		Log(NAME + " Plugin : " + str(e))
-		return MessageContainer(NAME, "Erreur lors de la récupération du flux XML.")
+		return MessageContainer(NAME, "Erreur lors de la rÃ©cupÃ©ration du flux XML.")
 
     
 	for category in XML.ElementFromString(XML_DATA).xpath("//category"):
