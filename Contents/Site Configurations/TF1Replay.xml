@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site site="http://videos.tf1.fr/.*" plugin="http://www.wat.tv/swfpu/.*" initialState="playing" version="1.0">
+
+	<seekbar type="simple">
+		<start x="110" y="330" />
+		<end x="415" y="330" />
+		<played>
+			<color rgb="ededed" />
+			<color rgb="f0f0f0" />
+			<color rgb="f7f7f7" />
+			<color rgb="eaeaea" />
+			<color rgb="e4e4e4" />
+			<color rgb="e0e0e0" />
+		</played>
+	</seekbar>
+
+	<crop x="0" y="0" width="0" height="0" />
+
+	<!-- PLAYING -->
+	<state name="playing">
+		<event>
+			<condition>
+				<command name="pause" />
+			</condition>
+			<action>
+				<click x="50" y="330" />
+				<goto state="paused" />
+			</action>
+		</event>
+	</state>
+
+	<!-- PAUSED -->
+	<state name="paused">
+		<event>
+			<condition>
+				<command name="play" />
+			</condition>
+			<action>
+				<click x="50" y="330" />
+				<goto state="playing" />
+			</action>
+		</event>
+	</state>
+
+</site>
