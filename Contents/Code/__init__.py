@@ -12,7 +12,7 @@ from PMS import *
 VIDEO_PREFIX = "/video/tf1replay"
 XML_CATALOG = "http://www.guinux.net/tf1.xml?v=1"
 XML_DATA	= ""
-NAME = L('TF1 Replay')
+NAME = "TF1 Replay"
 
 PLUGIN_ID               = "com.plexapp.plugins.tf1eplay"
 PLUGIN_REVISION         = 0.1
