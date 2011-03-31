@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# PMS plugin framework
-from PMS import *
 
 ####################################################################################################
 # Author : GuinuX. For any bug report, PM GuinuX on Plex Forums
@@ -11,7 +9,6 @@ from PMS import *
 
 VIDEO_PREFIX = "/video/tf1replay"
 XML_CATALOG = "http://www.guinux.net/tf1.xml?v=1"
-XML_DATA	= ""
 NAME = "TF1 Replay"
 
 PLUGIN_ID               = "com.plexapp.plugins.tf1eplay"
@@ -29,20 +26,18 @@ def Start():
 	Plugin.AddViewGroup("Coverflow", viewMode="Coverflow", mediaType="items")
 	Plugin.AddViewGroup("InfoList", viewMode="InfoList", mediaType="items")
 
-	
 	MediaContainer.art = R(ART)
 	MediaContainer.title1 = NAME
 	DirectoryItem.thumb = R(ICON)
+	HTTP.CacheTime=CACHE_1MINUTE * 30
 
-
+	Dict['XML_DATA']	= ""
 
 def VideoMainMenu():
-	global XML_DATA
-	
 	dir = MediaContainer(viewGroup="Coverflow")
 	
 	try:
-		XML_DATA = HTTP.Request(XML_CATALOG, cacheTime=CACHE_1MINUTE * 30)
+		Dict['XML_DATA'] = HTTP.Request(XML_CATALOG).content.decode("iso-8859-1")
 	except Ex.HTTPError, e:
 		Log(NAME + " Plugin : " + str(e))
 		return MessageContainer(NAME, "Erreur lors de la récupération du flux XML.")	
@@ -51,7 +46,7 @@ def VideoMainMenu():
 		return MessageContainer(NAME, "Erreur lors de la récupération du flux XML.")
 
     
-	for category in XML.ElementFromString(XML_DATA).xpath("//category"):
+	for category in XML.ElementFromString(Dict['XML_DATA'],encoding = "iso-8859-1").xpath("//category"):
 		id = category.get('id')
 		nom = category.get('name')
 		thumb = category.get('picture')
@@ -61,12 +56,10 @@ def VideoMainMenu():
 
 
 def ListShows(sender, idCategorie, nomCategorie):
-	global XML_DATA
-
 	dir = MediaContainer(viewGroup="Coverflow", title1 = NAME, title2 = nomCategorie)
 	search = "//category[@id='" + idCategorie + "']/show"
 	
-	for show in XML.ElementFromString(XML_DATA).xpath(search):
+	for show in XML.ElementFromString(Dict['XML_DATA'],encoding = "iso-8859-1").xpath(search):
 		id = show.get('id')
 		nom = show.get('name')
 		thumb = show.get('thumb')
@@ -79,11 +72,9 @@ def ListShows(sender, idCategorie, nomCategorie):
 	
 	
 def ListEpisodes(sender, idShow, nomShow):
-	global XML_DATA
-
 	dir = MediaContainer(viewGroup="InfoList", title1 = NAME, title2 = nomShow)
 	search = "//show[@id='" + idShow + "']/episode"
-	for episode in XML.ElementFromString(XML_DATA).xpath(search):
+	for episode in XML.ElementFromString(Dict['XML_DATA'],encoding = "iso-8859-1").xpath(search):
 		description	= ""
 		nom			= episode.xpath("./title")[0].text
 		duree		= episode.xpath("./duration")[0].text
@@ -95,7 +86,6 @@ def ListEpisodes(sender, idShow, nomShow):
 		if duree:
 			description	= description + "\n\nTemps : " + duree
 		dir.Append(WebVideoItem(url = video, title = nom, subtitle = nomShow, summary = description, thumb = thumb))
-
 
 	return dir
 	
